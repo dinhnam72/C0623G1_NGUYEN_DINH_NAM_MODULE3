@@ -1,27 +1,27 @@
-create database quan_ly_ban_hang;
-use quan_ly_ban_hang;
-create table customer(
-	c_id int primary key auto_increment,
-    c_name varchar(75) not null,
-    c_age int 
+CREATE DATABASE quan_ly_ban_hang;
+USE quan_ly_ban_hang;
+CREATE TABLE customer(
+	c_id INT PRIMARY KEY AUTO_INCREMENT,
+    c_name VARCHAR(75) NOT NULL,
+    c_age INT DEFAULT 4
 );
-create table order_product(
-	o_id int primary key auto_increment,
-    c_id int,
-    o_date date ,
-    o_total_price int,
-    foreign key(c_id) references customer(c_id)
+CREATE TABLE order_product(
+	o_id INT PRIMARY KEY AUTO_INCREMENT,
+    c_id INT NOT NULL,
+    o_date DATE NOT NULL,
+    o_total_price INT DEFAULT 0,
+    FOREIGN KEY(c_id) REFERENCES customer(c_id)
 );
-create table product(
-	p_id int primary key auto_increment,
-    p_name varchar(75) ,
-    p_price int
+CREATE TABLE product(
+	p_id INT PRIMARY KEY AUTO_INCREMENT,
+    p_name VARCHAR(75) NOT NULL,
+    p_price INT DEFAULT 1
 );
-create table order_detail(
-	o_id int,
-    p_id int,
-    primary key(o_id,p_id),
-    od_qty int,
-    foreign key(o_id) references order_product(o_id),
-    foreign key(p_id) references product(p_id)
+CREATE TABLE order_detail(
+	o_id INT,
+    p_id INT,
+    PRIMARY KEY(o_id,p_id),
+    od_qty INT DEFAULT 0,
+    FOREIGN KEY(o_id) REFERENCES order_product(o_id),
+    FOREIGN KEY(p_id) REFERENCES product(p_id)
 );
