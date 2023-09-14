@@ -91,7 +91,6 @@ SELECT *
  FROM subjects
  WHERE credit >= 3 AND credit <= 5;
  
-SET sql_safe_updates = 1;
 UPDATE student SET class_id=2
 WHERE student_name LIKE'%hung';
 
