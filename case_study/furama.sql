@@ -232,7 +232,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
     WHERE khach_hang.ma_loai_khach=1
     GROUP BY khach_hang.ma_khach_hang
     ORDER BY COUNT(khach_hang.ma_khach_hang);
-    select*from dich_vu
+   
 -- 5.	Hiển thị ma_khach_hang, ho_ten, ten_loai_khach, ma_hop_dong, ten_dich_vu, ngay_lam_hop_dong, ngay_ket_thuc, tong_tien (Với tổng tiền được tính theo 
 -- công thức như sau: Chi Phí Thuê + Số Lượng * Giá, với Số Lượng và Giá là từ bảng dich_vu_di_kem, hop_dong_chi_tiet) 
 -- cho tất cả các khách hàng đã từng đặt phòng. (những khách hàng nào chưa từng đặt phòng cũng phải hiển thị ra).
@@ -244,20 +244,14 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
      dv.ten_dich_vu,
      hd.ngay_lam_hop_dong,
      hd.ngay_ket_thuc,
-	sum(dv.chi_phi_thue + hdct.so_luong * dvdk.gia) AS tong_tien
+	 ((dv.chi_phi_thue) + (hdct.so_luong * dvdk.gia)) AS tong_tien
      FROM khach_hang AS kh
      LEFT JOIN loai_khach AS lk ON kh.ma_loai_khach = lk.ma_loai_khach
      LEFT JOIN hop_dong AS hd ON kh.ma_khach_hang = hd.ma_khach_hang
      LEFT JOIN hop_dong_chi_tiet AS hdct ON hd.ma_hop_dong = hdct.ma_hop_dong
      LEFT JOIN dich_vu_di_kem AS dvdk ON hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
      LEFT JOIN dich_vu AS dv ON hd.ma_dich_vu = dv.ma_dich_vu
-    GROUP BY kh.ma_khach_hang, 
-     kh.ho_ten,
-     lk.ten_loai_khach, 
-     hd.ma_hop_dong, 
-     dv.ten_dich_vu,
-     hd.ngay_lam_hop_dong,
-     hd.ngay_ket_thuc
+    --  GROUP BY kh.ma_khach_hang 
      ORDER BY kh.ma_khach_hang;
 
 -- Tong tiền cho mỗi mã hợp đồng
@@ -268,10 +262,51 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 -- from hop_dong_chi_tiet  hdct
 -- left join dich_vu_di_kem dvdk on hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
 
+-- select kh.ma_khach_hang, hd.ma_hop_dong from khach_hang kh left join hop_dong hd on kh.ma_khach_hang = hd.ma_khach_hang
+-- select*from dich_vu
+-- select*from hop_dong
+-- (select hd.ma_hop_dong, dv.chi_phi_thue + sum(hdct.so_luong * dvdk.gia) as tong_tien from hop_dong as hd
+-- join dich_vu dv on hd.ma_dich_vu = dv.ma_dich_vu
+-- left join hop_dong_chi_tiet as hdct on hd.ma_hop_dong = hdct.ma_hop_dong
+-- join dich_vu_di_kem dvdk on hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
+-- group by hd.ma_hop_dong)
+-- WITH bang_tam(ma_hop_dong,
+-- ma_hop_dong_chi_tiet,
+-- so_luong,
+-- gia,
+-- tong) AS (
+-- SELECT
+-- 	hdct.ma_hop_dong AS ma_hop_dong,
+-- 	hdct.ma_hop_dong_chi_tiet AS ma_hop_dong_chi_tiet,
+-- 	hdct.so_luong AS so_luong,
+-- 	dvdk.gia AS gia,
+-- 	hdct.so_luong * dvdk.gia AS tong
+-- FROM
+-- 	hop_dong_chi_tiet hdct
+-- LEFT JOIN dich_vu_di_kem dvdk ON
+-- 	hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem)  
+-- SELECT
+-- 	hd.ma_hop_dong,
+--     hd.ma_khach_hang,
+--     hd.ma_dich_vu,
+--     bang_tam.ma_hop_dong_chi_tiet,
+--     bang_tam.so_luong,
+--     bang_tam.gia,
+--     bang_tam.tong,
+--     kh.ho_ten,
+--     hd.ngay_lam_hop_dong
 
-
-
-	
+-- FROM
+-- 	bang_tam,
+-- 	hop_dong hd,
+--     dich_vu dv,
+--     khach_hang kh
+--     
+-- WHERE
+-- 	bang_tam.ma_hop_dong = hd.ma_hop_dong 
+--     and hd.ma_khach_hang = kh.ma_khach_hang 
+--     and hd.ma_dich_vu = dv.ma_dich_vu;
+--     -- and kh.ma_loai_khach = lk.ma_loai_khach;
      
 
  -- SET GLOBAL sql_mode='STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_ENGINE_SUBSTITUTION';
