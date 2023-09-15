@@ -393,8 +393,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
         ldv.ten_loai_dich_vu,
         dvdk.ten_dich_vu_di_kem,
 	    (COUNT(hdct.so_luong)) AS so_lan_dich_vu_di_kem
-        FROM khach_hang kh
-        JOIN hop_dong hd ON kh.ma_khach_hang = hd.ma_khach_hang
+        FROM hop_dong hd 
         JOIN dich_vu dv ON dv.ma_dich_vu = hd.ma_dich_vu
         JOIN loai_dich_vu ldv ON ldv.ma_loai_dich_vu = dv.ma_loai_dich_vu
 		JOIN hop_dong_chi_tiet hdct ON hd.ma_hop_dong = hdct.ma_hop_dong
@@ -402,5 +401,23 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 		GROUP BY dvdk.ma_dich_vu_di_kem
         HAVING COUNT(hdct.so_luong) = 1;
       
-
+--  15.	Hiển thi thông tin của tất cả nhân viên bao gồm ma_nhan_vien, ho_ten, ten_trinh_do, ten_bo_phan, so_dien_thoai, dia_chi mới chỉ lập được tối đa 3 hợp đồng từ năm 2020 đến 2021.
+		SELECT 
+        nv.ma_nhan_vien,
+        nv.ho_ten,
+        td.ten_trinh_do,
+        bp.ten_bo_phan,
+        nv.so_dien_thoai,
+        nv.dia_chi
+        FROM nhan_vien nv
+        JOIN bo_phan bp ON nv.ma_bo_phan = bp.ma_bo_phan
+        JOIN trinh_do td ON nv.ma_trinh_do = td.ma_trinh_do
+        JOIN hop_dong hd ON hd.ma_nhan_vien = nv.ma_nhan_vien
+        WHERE YEAR(hd.ngay_lam_hop_dong) >= 2020 
+        AND YEAR(hd.ngay_lam_hop_dong)<=2021
+        GROUP BY nv.ma_nhan_vien
+        HAVING COUNT(hd.ngay_lam_hop_dong) <= 3 ;
+-- 16.	Xóa những Nhân viên chưa từng lập được hợp đồng nào từ năm 2019 đến năm 2021.        
+        
+        
  -- SET GLOBAL sql_mode='STRICT_TRANS_TABLES,STRICT_ALL_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,TRADITIONAL,NO_ENGINE_SUBSTITUTION';
