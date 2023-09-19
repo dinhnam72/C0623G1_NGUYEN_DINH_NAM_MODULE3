@@ -296,9 +296,8 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
     JOIN hop_dong hd ON dv.ma_dich_vu = hd.ma_dich_vu
     WHERE YEAR(hd.ngay_lam_hop_dong) = 2020 AND dv.ma_dich_vu
 		NOT IN (
-			SELECT dv.ma_dich_vu
-			FROM dich_vu dv
-			JOIN hop_dong hd ON dv.ma_dich_vu = hd.ma_dich_vu
+			SELECT hd.ma_dich_vu
+			FROM hop_dong hd
 			WHERE YEAR(hd.ngay_lam_hop_dong) = 2021
         );
 	-- 8.	Hiển thị thông tin ho_ten khách hàng có trong hệ thống, với yêu cầu ho_ten không trùng nhau.
@@ -313,7 +312,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 	-- Cach 3
  		SELECT kh.ho_ten 
         FROM khach_hang kh
-        union
+        UNION
         SELECT kh.ho_ten 
         FROM khach_hang kh;
 	
@@ -328,8 +327,8 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
         SELECT hd.ma_hop_dong,
         hd.ngay_lam_hop_dong,
         hd.ngay_ket_thuc, hd.tien_dat_coc,
-        hdct.so_luong, SUM(IFNULL(hdct.so_luong,0))
-        AS so_lương_dich_vu_di_kem
+        hdct.so_luong, 
+        SUM(IFNULL(hdct.so_luong,0)) AS so_luong_dich_vu_di_kem
         FROM hop_dong hd
         LEFT JOIN hop_dong_chi_tiet hdct ON hd.ma_hop_dong = hdct.ma_hop_dong
         GROUP BY hd.ma_hop_dong;
@@ -337,13 +336,12 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 -- 11.	Hiển thị thông tin các dịch vụ đi kèm đã được sử dụng bởi những khách hàng có ten_loai_khach là “Diamond” và có dia_chi ở “Vinh” hoặc “Quảng Ngãi”.    
        SELECT kh.ma_khach_hang, dvdk.ma_dich_vu_di_kem, dvdk.ten_dich_vu_di_kem, dvdk.gia, dvdk.don_vi , dvdk.trang_thai , lk.ten_loai_khach, kh.dia_chi
        FROM khach_hang kh
-       JOIN loai_khach lk ON kh.ma_loai_khach= lk.ma_loai_khach
+       JOIN loai_khach lk ON kh.ma_loai_khach= lk.ma_loai_khach 
+       AND lk.ten_loai_khach = 'Diamond'
        JOIN hop_dong hd ON kh.ma_khach_hang = hd.ma_khach_hang
        JOIN hop_dong_chi_tiet hdct ON hd.ma_hop_dong = hdct.ma_hop_dong
-       JOIN dich_vu_di_kem dvdk ON hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem
-       WHERE lk.ten_loai_khach = 'Diamond'
-       AND 
-       (kh.dia_chi like '%Vinh' OR kh.dia_chi like '%Quảng Ngãi');
+       AND  (kh.dia_chi like '%Vinh' OR kh.dia_chi like '%Quảng Ngãi')
+       JOIN dich_vu_di_kem dvdk ON hdct.ma_dich_vu_di_kem = dvdk.ma_dich_vu_di_kem;
        
  -- 12.	Hiển thị thông tin ma_hop_dong, ho_ten (nhân viên), ho_ten (khách hàng), 
  -- so_dien_thoai (khách hàng), ten_dich_vu, so_luong_dich_vu_di_kem (được tính dựa trên việc sum so_luong ở dich_vu_di_kem), tien_dat_coc của 
@@ -354,7 +352,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
        kh.ho_ten AS ho_ten_khach_hang, 
        kh.so_dien_thoai,
        dv.ten_dich_vu,
-	   SUM(hdct.so_luong) AS so_luong_dich_vu_di_kem,
+	   SUM(IFNULL(hdct.so_luong,0)) AS so_luong_dich_vu_di_kem,
        hd.tien_dat_coc
        FROM khach_hang kh 
 	    JOIN hop_dong hd ON kh.ma_khach_hang = hd.ma_khach_hang
@@ -366,7 +364,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 				AND hd.ma_dich_vu 
                 NOT IN ( SELECT hd.ma_dich_vu
 						FROM hop_dong hd
-						WHERE hd.ngay_lam_hop_dong >='2021-01-01' AND hd.ngay_lam_hop_dong <='2021-06-30')
+						WHERE YEAR(hd.ngay_lam_hop_dong)=2021 AND QUARTER(hd.ngay_lam_hop_dong) < 3)
        GROUP BY hd.ma_hop_dong;
        
 -- 13.	Hiển thị thông tin các Dịch vụ đi kèm được sử dụng nhiều nhất bởi các Khách hàng đã đặt phòng. 
@@ -416,8 +414,7 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
         JOIN bo_phan bp ON nv.ma_bo_phan = bp.ma_bo_phan
         JOIN trinh_do td ON nv.ma_trinh_do = td.ma_trinh_do
         JOIN hop_dong hd ON hd.ma_nhan_vien = nv.ma_nhan_vien
-        WHERE YEAR(hd.ngay_lam_hop_dong) >= 2020 
-        AND YEAR(hd.ngay_lam_hop_dong)<=2021
+        AND YEAR(hd.ngay_lam_hop_dong) IN (2020,2021)
         GROUP BY nv.ma_nhan_vien
         HAVING COUNT(hd.ngay_lam_hop_dong) <= 3 ;
         
@@ -430,12 +427,11 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
         SELECT 
         nv.ma_nhan_vien
         FROM nhan_vien nv
-        LEFT JOIN hop_dong hd ON hd.ma_nhan_vien = nv.ma_nhan_vien
-        WHERE YEAR(hd.ngay_lam_hop_dong) >= 2019 
-        AND YEAR(hd.ngay_lam_hop_dong) <= 2021) AS t);
+		JOIN hop_dong hd ON hd.ma_nhan_vien = nv.ma_nhan_vien
+        AND YEAR(hd.ngay_lam_hop_dong) IN (2019,2021)) AS t);
         
 -- 17.	Cập nhật thông tin những khách hàng có ten_loai_khach từ Platinum lên Diamond, chỉ cập nhật những khách hàng đã từng đặt phòng với 
--- Tổng Tiền thanh toán trong năm 2021 là lớn hơn 10.000.000 VNĐ.  
+-- Tổng Tiền thanh toán trong năm 2021 là lớn hơn 1.000.000 VNĐ.  
 	  CREATE TEMPORARY TABLE bang_tam (SELECT    
        kh.ma_khach_hang,
        SUM(IFNULL(hdct.so_luong,0 ) * IFNULL(dvdk.gia,0)) AS tong_tien
@@ -455,10 +451,11 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
 		(SUM(IFNULL(dv.chi_phi_thue,0)) + bt.tong_tien) AS tong_thanh_toan 
         FROM khach_hang kh
         JOIN loai_khach lk ON kh.ma_loai_khach = lk.ma_loai_khach
+        AND lk.ma_loai_khach =2
 		JOIN hop_dong hd ON kh.ma_khach_hang = hd.ma_khach_hang
+        AND YEAR(hd.ngay_lam_hop_dong) = 2021 
 		JOIN dich_vu dv ON dv.ma_dich_vu = hd.ma_dich_vu
         LEFT JOIN bang_tam bt ON kh.ma_khach_hang = bt.ma_khach_hang
-        WHERE YEAR(hd.ngay_lam_hop_dong) = 2021 AND lk.ma_loai_khach =2
         GROUP BY kh.ma_khach_hang
         HAVING tong_thanh_toan >1000000
         ORDER BY kh.ma_khach_hang) AS abc);
@@ -483,8 +480,8 @@ OR SUBString_INDEX(ho_ten,' ',-1) LIKE 'K%');
      dvdk.ma_dich_vu_di_kem
      FROM hop_dong hd
      JOIN hop_dong_chi_tiet hdct ON hdct.ma_hop_dong = hd.ma_hop_dong
+     AND YEAR (hd.ngay_lam_hop_dong) =2020
      JOIN dich_vu_di_kem dvdk ON dvdk.ma_dich_vu_di_kem = hdct.ma_dich_vu_di_kem
-     WHERE YEAR (hd.ngay_lam_hop_dong) =2020
      GROUP BY dvdk.ma_dich_vu_di_kem
      HAVING SUM(hdct.so_luong) >10) AS gia);
      
