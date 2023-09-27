@@ -14,11 +14,11 @@
         </tr>
         <tr>
             <td><label for="listPrice">List Price</label></td>
-            <td><input type="text" id="listPrice" name="listPrice"></td>
+            <td><input type="number" id="listPrice" name="listPrice"></td>
         </tr>
         <tr>
             <td><label for="discountPercent">Discount Percent</label></td>
-            <td><input type="text" id="discountPercent" name="discountPercent"></td>
+            <td><input type="number" id="discountPercent" name="discountPercent"></td>
         </tr>
 
     </table>
