@@ -15,6 +15,6 @@ public interface IProductService {
 
     Product detailProduct(int id);
 
-    Product searchProduct(String name);
+    List<Product> searchProduct(String name);
     Product findById(int id);
 }

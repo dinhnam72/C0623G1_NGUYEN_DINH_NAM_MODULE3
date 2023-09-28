@@ -47,12 +47,19 @@ public class ProductRepository implements IProductRepository{
     @Override
     public Product detailProduct(int id) {
         int index = checkId(id);
-        return productList.get(index);
+        Product product = productList.get(index);
+        return product;
     }
 
     @Override
-    public Product searchProduct(String name) {
-        return null;
+    public List<Product> searchProduct(String name) {
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getName().contains(name)){
+                products.add(productList.get(i));
+            }
+        }
+        return products;
     }
 
 }

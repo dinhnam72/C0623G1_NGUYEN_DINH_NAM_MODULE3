@@ -52,9 +52,7 @@
 <div>
     <a href="form_add.jsp">Thêm sản phẩm</a><br>
     <a href="form_detail.jsp">Thông tin chi tiết sản phẩm</a><br>
-    <a href="">Tìm kiếm sản phẩm theo tên</a>
-
-
+    <a href="form_search.jsp">Tìm kiếm sản phẩm theo tên</a>
 </div>
 </body>
 </html>

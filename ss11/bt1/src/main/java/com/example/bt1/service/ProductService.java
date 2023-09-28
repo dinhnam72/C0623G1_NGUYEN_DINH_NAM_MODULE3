@@ -23,6 +23,7 @@ public class ProductService implements IProductService {
     @Override
     public void editProduct(int id, Product product) {
         productRepository.editProduct(id, product);
+
     }
 
     @Override
@@ -37,15 +38,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product searchProduct(String name) {
-        return null;
+    public List<Product> searchProduct(String name) {
+        List<Product> products = productRepository.searchProduct(name);
+        if (products.size() == 0) {
+            return null;
+        } else {
+            return products;
+        }
+
     }
 
     @Override
     public Product findById(int id) {
         List<Product> productList = productRepository.getAll();
-        int index = productRepository.checkId(id);
-        return productList.get(index);
+        return productList.get(productRepository.checkId(id));
+
     }
 
 }
