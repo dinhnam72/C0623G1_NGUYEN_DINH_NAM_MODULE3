@@ -26,28 +26,12 @@ public class ProductServlet extends HttpServlet {
             case "remove":
                 showRemove(request, response);
                 break;
-//            case "detail":
-//                showDetail(request,response);
-//                break;
             default:
                 showList(request, response);
 
         }
     }
 
-//    private void showDetail(HttpServletRequest request, HttpServletResponse response) {
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        Product product = productService.detailProduct(id);
-//        request.setAttribute("product", product);
-//        RequestDispatcher dispatcher = request.getRequestDispatcher("/form_detail.jsp");
-//        try {
-//            dispatcher.forward(request,response);
-//        } catch (ServletException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     protected void showList(HttpServletRequest request, HttpServletResponse response)  {
         request.setAttribute("productList", productService.display());
