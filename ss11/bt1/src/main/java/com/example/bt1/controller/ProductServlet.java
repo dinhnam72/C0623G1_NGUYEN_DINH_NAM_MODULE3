@@ -96,7 +96,7 @@ public class ProductServlet extends HttpServlet {
         String productionDate = request.getParameter("productionDate");
         String expirationDate = request.getParameter("expirationDate");
         Product product = new Product(id, name, price, productionDate, expirationDate);
-        productService.editProduct(id, product);
+        productService.editProduct( product);
         showList(request, response);
 
     }

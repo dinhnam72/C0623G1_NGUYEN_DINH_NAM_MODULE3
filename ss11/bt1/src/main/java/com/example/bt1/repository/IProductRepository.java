@@ -11,7 +11,7 @@ public interface IProductRepository {
 
     int checkId(int id);
 
-    void editProduct(int id, Product product);
+    void editProduct( Product product);
 
     void removeProduct(int id);
 

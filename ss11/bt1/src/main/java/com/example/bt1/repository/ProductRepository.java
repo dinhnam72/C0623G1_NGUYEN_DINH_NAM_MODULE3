@@ -33,8 +33,8 @@ public class ProductRepository implements IProductRepository{
     }
 
     @Override
-    public void editProduct(int id, Product product) {
-        int index = checkId(id);
+    public void editProduct( Product product) {
+       int index = checkId( product.getId());
         productList.set(index,product);
     }
 

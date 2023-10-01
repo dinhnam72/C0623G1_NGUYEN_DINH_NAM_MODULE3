@@ -21,8 +21,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void editProduct(int id, Product product) {
-        productRepository.editProduct(id, product);
+    public void editProduct( Product product) {
+        productRepository.editProduct( product);
 
     }
 
