@@ -22,10 +22,10 @@ public class ProductServlet extends HttpServlet {
         }
         switch (action) {
             case "edit":
-                showEdit(request, response);
+                editProduct(request, response);
                 break;
             case "remove":
-                showRemove(request, response);
+                remove(request, response);
                 break;
             default:
                 showList(request, response);
@@ -46,7 +46,7 @@ public class ProductServlet extends HttpServlet {
         }
     }
 
-    protected void showEdit(HttpServletRequest request, HttpServletResponse response) {
+    protected void editProduct(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.findById(id);
         request.setAttribute("product", product);
@@ -61,7 +61,7 @@ public class ProductServlet extends HttpServlet {
 
     }
 
-    protected void showRemove(HttpServletRequest request, HttpServletResponse response) {
+    protected void remove(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         productService.removeProduct(id);
         showList(request, response);
