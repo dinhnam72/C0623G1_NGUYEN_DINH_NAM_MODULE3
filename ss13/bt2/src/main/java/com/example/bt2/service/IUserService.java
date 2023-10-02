@@ -1,6 +1,6 @@
-package com.example.bt1.service;
+package com.example.bt2.service;
 
-import com.example.bt1.model.User;
+import com.example.bt2.model.User;
 
 import java.util.List;
 

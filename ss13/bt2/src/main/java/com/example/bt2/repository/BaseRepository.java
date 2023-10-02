@@ -1,4 +1,4 @@
-package com.example.bt1.repository;
+package com.example.bt2.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

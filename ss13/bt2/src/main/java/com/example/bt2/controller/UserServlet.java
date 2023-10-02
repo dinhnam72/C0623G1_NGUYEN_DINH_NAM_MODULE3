@@ -1,8 +1,8 @@
-package com.example.bt1.controller;
+package com.example.bt2.controller;
 
-import com.example.bt1.model.User;
-import com.example.bt1.service.IUserService;
-import com.example.bt1.service.UserService;
+import com.example.bt2.model.User;
+import com.example.bt2.service.IUserService;
+import com.example.bt2.service.UserService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

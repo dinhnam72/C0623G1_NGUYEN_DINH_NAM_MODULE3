@@ -1,6 +1,6 @@
-package com.example.bt1.repository;
+package com.example.bt2.repository;
 
-import com.example.bt1.model.User;
+import com.example.bt2.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -57,11 +57,14 @@ public class UserRepository implements IUserRepository {
     public void add(User user) {
         Connection connection = BaseRepository.getConnection();
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SP);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
             preparedStatement.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

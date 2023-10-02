@@ -1,4 +1,4 @@
-package com.example.bt1.model;
+package com.example.bt2.model;
 
 public class User {
     private int id;

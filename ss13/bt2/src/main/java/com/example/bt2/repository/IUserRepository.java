@@ -1,6 +1,6 @@
-package com.example.bt1.repository;
+package com.example.bt2.repository;
 
-import com.example.bt1.model.User;
+import com.example.bt2.model.User;
 
 import java.util.List;
 

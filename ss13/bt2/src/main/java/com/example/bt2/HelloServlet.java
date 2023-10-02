@@ -1,4 +1,4 @@
-package com.example.bt1;
+package com.example.bt2;
 
 import java.io.*;
 import javax.servlet.http.*;
