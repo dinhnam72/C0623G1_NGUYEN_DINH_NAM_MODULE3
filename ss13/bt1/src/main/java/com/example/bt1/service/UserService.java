@@ -22,7 +22,6 @@ public class UserService implements IUserService {
 
     @Override
     public void updateUser(int id, User user) {
-
         userRepository.update(id, user);
     }
 

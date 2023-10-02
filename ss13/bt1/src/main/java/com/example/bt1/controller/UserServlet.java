@@ -26,7 +26,7 @@ public class UserServlet extends HttpServlet {
                 remove(request, response);
                 break;
             case "update":
-                fillUpdateForm(request, response);
+                update(request, response);
                 break;
             default:
                 showList(request, response);
@@ -51,7 +51,7 @@ public class UserServlet extends HttpServlet {
         showList(request, response);
     }
 
-    private void fillUpdateForm(HttpServletRequest request, HttpServletResponse response) {
+    private void update(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         if (userService.findById(id) == null) {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/error.jsp");
@@ -90,13 +90,11 @@ public class UserServlet extends HttpServlet {
             case "create":
                 create(request, response);
             case "update":
-                updateUser(request,response);
+                showUpdate(request,response);
                 break;
             case "search":
                 search(request,response);
                 break;
-            default:
-                showList(request, response);
         }
     }
 
@@ -135,7 +133,7 @@ public class UserServlet extends HttpServlet {
         userService.addUser(user);
         showList(request, response);
     }
-    private void updateUser(HttpServletRequest request, HttpServletResponse response) {
+    private void showUpdate(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
         String email = request.getParameter("email");
